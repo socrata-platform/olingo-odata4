@@ -20,6 +20,6 @@ lazy val serverCore = (project in file("lib/server-core")).dependsOn(serverApi, 
     libraryDependencies += "javax.servlet" % "servlet-api" % "2.5" % Provided,
     libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.8",
     libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.7.8",
-    libraryDependencies += "com.fasterxml" % "aalto-xml" % "0.9.10"
+    libraryDependencies += "com.fasterxml" % "aalto-xml" % "0.9.11"
   )
 
