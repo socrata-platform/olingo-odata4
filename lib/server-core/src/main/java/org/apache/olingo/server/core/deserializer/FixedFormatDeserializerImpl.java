@@ -100,12 +100,22 @@ public class FixedFormatDeserializerImpl implements FixedFormatDeserializer {
       result.setType(type.getFullQualifiedName().getFullQualifiedNameAsString());
       final EdmPrimitiveType primitiveType = (EdmPrimitiveType) type;
       try {
-        result.setValue(type.getKind() == EdmTypeKind.ENUM ? ValueType.ENUM : ValueType.PRIMITIVE,
-            primitiveType.valueOfString(primitiveType.fromUriLiteral(content),
-                parameter.isNullable(), parameter.getMaxLength(), parameter.getPrecision(), parameter.getScale(), true,
-                parameter.getMapping() == null ?
-                    primitiveType.getDefaultType() :
-                      parameter.getMapping().getMappedJavaClass()));
+        final Class<?> javaClass = parameter.getMapping() == null || parameter.getMapping().getMappedJavaClass() == null
+            ? primitiveType.getDefaultType()
+            : parameter.getMapping().getMappedJavaClass();
+
+        result.setValue(
+          type.getKind() == EdmTypeKind.ENUM ? ValueType.ENUM : ValueType.PRIMITIVE,
+          primitiveType.valueOfString(
+            primitiveType.fromUriLiteral(content),
+            parameter.isNullable(),
+            parameter.getMaxLength(),
+            parameter.getPrecision(),
+            parameter.getScale(),
+            true,
+            javaClass
+          )
+        );
       } catch (final EdmPrimitiveTypeException e) {
         throw new DeserializerException(
             "Invalid value '" + content + "' for parameter " + parameter.getName(), e,

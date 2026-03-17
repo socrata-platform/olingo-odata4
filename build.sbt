@@ -1,6 +1,6 @@
 name := "odata-olingo"
-scalaVersion in ThisBuild := "2.12.8"
-javacOptions in ThisBuild ++= Seq("-encoding", "UTF-8", "-source", "1.6")
+ThisBuild / scalaVersion := "2.12.21"
+ThisBuild / javacOptions ++= Seq("-encoding", "UTF-8", "-source", "25")
 
 lazy val commonsApi = (project in file("lib/commons-api")).settings(
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11",

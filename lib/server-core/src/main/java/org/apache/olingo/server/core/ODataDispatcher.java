@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -147,11 +147,11 @@ public class ODataDispatcher {
       handleEntityDispatching(request, response,
           ((UriResourcePartTyped) lastPathSegment).isCollection(), isEntityOrNavigationMedia(lastPathSegment));
       break;
-      
+
     case singleton:
       handleSingleEntityDispatching(request, response, isSingletonMedia(lastPathSegment), true);
       break;
-      
+
     case count:
       checkMethod(request.getMethod(), HttpMethod.GET);
       handleCountDispatching(request, response, lastPathSegmentIndex);
@@ -322,7 +322,7 @@ public class ODataDispatcher {
   }
 
   private void handleMediaValueDispatching(final ODataRequest request, final ODataResponse response,
-      final UriResource resource) throws ContentNegotiatorException, 
+      final UriResource resource) throws ContentNegotiatorException,
      ODataApplicationException, ODataLibraryException,
       ODataHandlerException, PreconditionException {
     final HttpMethod method = request.getMethod();
@@ -334,7 +334,7 @@ public class ODataDispatcher {
       handler.selectProcessor(MediaEntityProcessor.class)
           .readMediaEntity(request, response, uriInfo, requestedContentType);
       // PUT and DELETE can only be called on EntitySets or Navigation properties which are media resources
-    } else if (method == HttpMethod.PUT && (isEntityOrNavigationMedia(resource) 
+    } else if (method == HttpMethod.PUT && (isEntityOrNavigationMedia(resource)
         || isSingletonMedia(resource))) {
       validatePreconditions(request, true);
       final ContentType requestFormat = ContentType.parse(request.getHeader(HttpHeader.CONTENT_TYPE));
@@ -350,9 +350,9 @@ public class ODataDispatcher {
       throwMethodNotAllowed(method);
     }
   }
-  
+
   private void handlePrimitiveValueDispatching(final ODataRequest request, final ODataResponse response,
-      final UriResource resource) throws ContentNegotiatorException, 
+      final UriResource resource) throws ContentNegotiatorException,
   ODataApplicationException, ODataLibraryException,
       ODataHandlerException, PreconditionException {
     final HttpMethod method = request.getMethod();
@@ -384,7 +384,7 @@ public class ODataDispatcher {
       throwMethodNotAllowed(method);
     }
   }
-  
+
   private void handleComplexDispatching(final ODataRequest request, final ODataResponse response,
       final boolean isCollection) throws ODataApplicationException, ODataLibraryException {
     final HttpMethod method = request.getMethod();
@@ -498,7 +498,7 @@ public class ODataDispatcher {
       }
   }
 
-  
+
   private void handleEntityCollectionDispatching(final ODataRequest request, final ODataResponse response,
       final boolean isMedia
       ) throws ContentNegotiatorException, ODataApplicationException, ODataLibraryException,
@@ -530,16 +530,16 @@ public class ODataDispatcher {
       throwMethodNotAllowed(method);
     }
   }
-  
-  private boolean isSingletonMedia(final UriResource pathSegment) { 
+
+  private boolean isSingletonMedia(final UriResource pathSegment) {
    return pathSegment instanceof UriResourceSingleton
        && ((UriResourceSingleton) pathSegment).getEntityType().hasStream();
   }
 
-  
-   
+
+
   private void handleSingleEntityDispatching(final ODataRequest request, final ODataResponse response,
-        final boolean isMedia, final boolean isSingleton) throws 
+        final boolean isMedia, final boolean isSingleton) throws
     ContentNegotiatorException, ODataApplicationException,
         ODataLibraryException, ODataHandlerException, PreconditionException {
       final HttpMethod method = request.getMethod();
@@ -562,14 +562,19 @@ public class ODataDispatcher {
       } else if (method == HttpMethod.DELETE && !isSingleton) {
         validateIsSingleton(method);
         validatePreconditions(request, false);
-        handler.selectProcessor(isMedia ? MediaEntityProcessor.class : EntityProcessor.class)
+        if(isMedia){
+          handler.selectProcessor(MediaEntityProcessor.class)
             .deleteEntity(request, response, uriInfo);
+        }else{
+          handler.selectProcessor(EntityProcessor.class)
+            .deleteEntity(request, response, uriInfo);
+        }
       } else {
         throwMethodNotAllowed(method);
       }
     }
 
-  /*Delete method is not allowed for Entities navigating to Singleton*/ 
+  /*Delete method is not allowed for Entities navigating to Singleton*/
   private void validateIsSingleton(HttpMethod method) throws ODataHandlerException {
    final int lastPathSegmentIndex = uriInfo.getUriResourceParts().size() - 1;
    final UriResource pathSegment = uriInfo.getUriResourceParts().get(lastPathSegmentIndex);
