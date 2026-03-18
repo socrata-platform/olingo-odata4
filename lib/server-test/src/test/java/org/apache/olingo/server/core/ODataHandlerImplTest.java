@@ -23,12 +23,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -761,19 +761,19 @@ public class ODataHandlerImplTest {
     final MediaEntityProcessor processor = mock(MediaEntityProcessor.class);
 
     dispatch(HttpMethod.GET, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
 
     dispatch(HttpMethod.POST, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
 
     dispatch(HttpMethod.PUT, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
 
     dispatch(HttpMethod.DELETE, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
     
     dispatch(HttpMethod.HEAD, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
   }
 
   @Test
@@ -1063,7 +1063,7 @@ public class ODataHandlerImplTest {
     EntityProcessor processor = mock(EntityProcessor.class);
     final ODataResponse response = dispatch(HttpMethod.POST, "ESAllPrim", null,
         HttpHeader.CONTENT_TYPE, null, processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
     assertEquals(HttpStatusCode.BAD_REQUEST.getStatusCode(), response.getStatusCode());
   }
 
@@ -1072,7 +1072,7 @@ public class ODataHandlerImplTest {
     EntityProcessor processor = mock(EntityProcessor.class);
     final ODataResponse response = dispatch(HttpMethod.POST, "ESAllPrim", null,
         HttpHeader.CONTENT_TYPE, "*/*", processor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
     assertEquals(HttpStatusCode.BAD_REQUEST.getStatusCode(), response.getStatusCode());
   }
 
@@ -1081,7 +1081,7 @@ public class ODataHandlerImplTest {
     EntityProcessor processor = mock(EntityProcessor.class);
     ErrorProcessor errorProcessor = mock(ErrorProcessor.class);
     dispatch(HttpMethod.POST, "ESAllPrim", null, HttpHeader.CONTENT_TYPE, "some/unsupported", errorProcessor);
-    verifyZeroInteractions(processor);
+    verifyNoMoreInteractions(processor);
     verify(errorProcessor).processError(any(ODataRequest.class), any(ODataResponse.class),
         any(ODataServerError.class),
         any(ContentType.class));

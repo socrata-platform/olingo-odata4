@@ -4,7 +4,7 @@ ThisBuild / javacOptions ++= Seq("-encoding", "UTF-8", "-source", "25")
 
 lazy val commonsApi = (project in file("lib/commons-api")).settings(
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11",
-    libraryDependencies += "org.mockito" % "mockito-core" % "1.10.19",
+    libraryDependencies += "org.mockito" % "mockito-core" % "2.25.0",
     libraryDependencies += "commons-io" % "commons-io" % "2.5"
   )
 

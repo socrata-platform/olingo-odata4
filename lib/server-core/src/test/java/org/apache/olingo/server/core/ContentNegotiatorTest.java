@@ -21,8 +21,7 @@ package org.apache.olingo.server.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -211,7 +210,7 @@ public class ContentNegotiatorTest {
 
     CustomContentTypeSupport customContentTypeSupport = mock(CustomContentTypeSupport.class);
     when(customContentTypeSupport.modifySupportedContentTypes(
-        anyListOf(ContentType.class), any(RepresentationType.class)))
+        any(List.class), any(RepresentationType.class)))
         .thenReturn(types);
     return customContentTypeSupport;
   }
