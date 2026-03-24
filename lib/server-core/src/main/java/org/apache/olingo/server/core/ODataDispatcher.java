@@ -562,8 +562,11 @@ public class ODataDispatcher {
       } else if (method == HttpMethod.DELETE && !isSingleton) {
         validateIsSingleton(method);
         validatePreconditions(request, false);
-        handler.selectProcessor(isMedia ? MediaEntityProcessor.class : EntityProcessor.class)
-            .deleteEntity(request, response, uriInfo);
+        if(isMedia) {
+            handler.selectProcessor(MediaEntityProcessor.class).deleteEntity(request, response, uriInfo);
+        } else {
+            handler.selectProcessor(EntityProcessor.class).deleteEntity(request, response, uriInfo);
+        }
       } else {
         throwMethodNotAllowed(method);
       }
