@@ -1,6 +1,6 @@
 name := "odata-olingo"
-scalaVersion in ThisBuild := "2.12.8"
-javacOptions in ThisBuild ++= Seq("-encoding", "UTF-8", "-source", "1.6")
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / javacOptions ++= Seq("-encoding", "UTF-8", "-source", "8", "-Xlint:deprecation")
 
 lazy val commonsApi = (project in file("lib/commons-api")).settings(
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11",
@@ -13,13 +13,20 @@ lazy val commonsCore = (project in file("lib/commons-core")).dependsOn(commonsAp
   )
 
 lazy val serverApi = (project in file("lib/server-api")).dependsOn(commonsApi).settings(
-    libraryDependencies += "javax.servlet" % "servlet-api" % "2.5" % Provided
+    libraryDependencies ++= Seq(
+      "jakarta.activation" % "jakarta.activation-api" % "2.1.3",
+      "org.eclipse.jetty.toolchain" % "jetty-jakarta-servlet-api" % "5.0.2" % Provided
+    )
   )
 
 lazy val serverCore = (project in file("lib/server-core")).dependsOn(serverApi, commonsCore).settings(
-    libraryDependencies += "javax.servlet" % "servlet-api" % "2.5" % Provided,
-    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.8",
-    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.7.8",
-    libraryDependencies += "com.fasterxml" % "aalto-xml" % "0.9.11"
+    libraryDependencies ++= Seq(
+      "jakarta.activation" % "jakarta.activation-api" % "2.1.3",
+      "org.eclipse.jetty.toolchain" % "jetty-jakarta-servlet-api" % "5.0.2" % Provided,
+      "javax.servlet" % "servlet-api" % "2.5" % Provided,
+      "com.fasterxml.jackson.core" % "jackson-core" % "2.7.8",
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.7.8",
+      "com.fasterxml" % "aalto-xml" % "0.9.11"
+    )
   )
 

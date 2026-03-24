@@ -1,3 +1,5 @@
+/.bsp/
+/project/
 .pmd
 .project
 .classpath
